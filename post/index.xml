@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Machine Learning Examples</title>
+    <link>https://minh84.github.io/ml-examples/post/index.xml</link>
+    <description>Recent content in Posts on Machine Learning Examples</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 05 Mar 2017 13:43:22 +0000</lastBuildDate>
+    <atom:link href="/ml-examples/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Linear Models</title>
+      <link>https://minh84.github.io/ml-examples/post/mlintro-linear-models/</link>
+      <pubDate>Sun, 05 Mar 2017 13:43:22 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/post/mlintro-linear-models/</guid>
+      <description>We start by looking at Supervised Learning with Linear Models inluding following topics
+ Linear Regression
+ Logistic Regression
+  Although Linear Models is a simple approach to supervised learning, it has a nice analytical form and it&amp;rsquo;s easy to interpret its results.
+Notation We define some notation to be used later
+ $\pmb{\mathrm{x}}^{(i)}\in\mathbb{R}^D,\ i=1,\ldots,N$ called input features $t^{(i)},\ i=1,\ldots,N$ called target variable  Our goal is to train/find a hypothesis function $h$ that allows us to predict a new target variable $t$ given a new input $\pmb{\mathrm{x}}=(x_1,\ldots,x_D)$ i.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/</loc>
+    <lastmod>2017-03-05T21:36:46+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/post/mlintro-linear-models/</loc>
+    <lastmod>2017-03-05T13:43:22+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/demos/</loc>
+    <lastmod>2017-03-05T21:36:46+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/</loc>
+    <lastmod>2017-03-05T21:36:46+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/post/</loc>
+    <lastmod>2017-03-05T13:43:22+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

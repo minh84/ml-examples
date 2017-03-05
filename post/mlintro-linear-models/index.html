@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="generator" content="Hugo 0.20-DEV" />
+    <link rel="shortcut icon" href="/ml-examples/images/favicon.ico">
+    <link href="https://minh84.github.io/ml-examples/index.xml" rel="alternate" type="application/rss+xml" title="Machine Learning Examples" />
+    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+    
+    <script src="https://apis.google.com/js/platform.js" async defer>{lang: 'ja'}</script>
+    
+    <link rel="stylesheet" href="https://yandex.st/highlightjs/8.0/styles/default.min.css">
+    <script src="https://yandex.st/highlightjs/8.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        displayMath: [['$$','$$'], ['\[','\]']],
+        processEscapes: true,
+        processEnvironments: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+        TeX: { equationNumbers: { autoNumber: "AMS" },
+             extensions: ["AMSmath.js", "AMSsymbols.js"] }
+      }
+    });
+    </script>
+    <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    
+    <link rel="stylesheet" type="text/css" href="/ml-examples/css/style.css">    
+    <title>Linear Models | Machine Learning Examples</title>
+  </head>
+  <body>
+    <div id="wrap">
+      
+      <header class="site-header">
+        <div class="site-header-left">
+          <a class="site-header-title" href="https://minh84.github.io/ml-examples/">Machine Learning Examples</a>
+        </div>
+      </header>
+      <div class="container">
+        <div id="main">
+
+<div class="article">
+  <header>
+    <div class="article-header">
+      <h1>Linear Models</h1>
+      <div class="article-meta">
+        <span class="posttime">2017/03/05</span>
+        
+
+      </div>
+    </div>
+    
+
+  </header>
+  <div class="content">
+    
+
+<p>We start by looking at Supervised Learning with Linear Models inluding following topics</p>
+
+<ul>
+<li><p>Linear Regression</p></li>
+
+<li><p>Logistic Regression</p></li>
+</ul>
+
+<p>Although Linear Models is a simple approach to supervised learning, it has a nice analytical form and it&rsquo;s easy to interpret its results.</p>
+
+<h2 id="notation">Notation</h2>
+
+<p>We define some notation to be used later</p>
+
+<ul>
+<li>$\pmb{\mathrm{x}}^{(i)}\in\mathbb{R}^D,\ i=1,\ldots,N$ called <em>input</em> features</li>
+<li>$t^{(i)},\ i=1,\ldots,N$ called <em>target</em> variable</li>
+</ul>
+
+<p>Our goal is to train/find a hypothesis function $h$ that allows us to predict a new <em>target</em> variable $t$ given a new <em>input</em> $\pmb{\mathrm{x}}=(x_1,\ldots,x_D)$ i.e
+$$
+t\approx h(\pmb{\mathrm{x}})
+$$</p>
+
+<h2 id="linear-regression">Linear Regression</h2>
+
+<p>In Linear Regression, we have the <em>target</em> taking continuous value i.e $t^{(i)}\in\mathbb{R}$ and we consider to model $h(\pmb{\mathrm{x}})$ as a linear combinations of a fixed set of <em>basis functions</em> $\phi_i(\pmb{\mathrm{x}})$
+$$
+h(\pmb{\mathrm{x}}) = \sum_i w_i \phi_i(\pmb{\mathrm{x}})
+$$</p>
+
+<p>To learn more about Linear Regression, we go through example</p>
+
+<ol>
+<li><a href="/demos/linear_models/01-Linear-Regression/">Least squares with boston housing dataset</a> where you will learn
+
+<ul>
+<li>Get <a href="https://archive.ics.uci.edu/ml/datasets/Housing">raw data</a> and convert it to <a href="http://pandas.pydata.org/">pandas</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Maximum_likelihood_estimation">Maximum likelihood</a> and <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">OLS</a></li>
+<li>Iterative first order optimization algorithm: <a href="https://en.wikipedia.org/wiki/Gradient_descent">GD</a> and <a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent">SGD</a> with impletementation in python</li>
+<li>Linear regression with <a href="www.tensorflow.org">TensorFlow</a></li>
+</ul></li>
+<li><a href="#">Regularized least squares</a> where you will learn</li>
+</ol>
+
+  </div>
+  <footer>
+    <div class="article-footer">
+      
+
+      
+      
+
+      
+      
+      <div id="pagenavigation-next-prev">
+        
+        
+        <div id="pagenavigation-prev">
+          <span class="pagenav-label">Next</span>
+          <a href="https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/"></a>
+        </div>
+        
+      </div>
+      
+    </div>
+  </footer>
+</div>
+        </div>
+        <div class="sidebar">
+  
+  
+  <div class="sidebar-content">
+    <div class="sidebar-header">
+      <span>Author</span>
+    </div>
+    <div id="author">
+      <span>Minh VU</span>
+      <div>
+        
+        
+        
+        
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="sidebar-content">
+    <div class="sidebar-header">
+      <span>RSS</span>
+    </div>
+    <div id="rss">
+      <a href="https://minh84.github.io/ml-examples/index.xml" type="application/rss+xml" target="_blank">
+        <i class="fa fa-rss-square fa-2x" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+      </div>
+      <footer>
+        <div id="site-footer-wrap">
+          <div id="site-footer">
+            <span>Powered by <a href="https://gohugo.io/">Hugo</a>.</span>
+            <span>
+              
+              Copyright (c) 2017, <a href="https://minh84.github.io/ml-examples/">Machine Learning Examples</a>
+              
+            </span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
+

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Machine Learning Examples on Machine Learning Examples</title>
+    <link>https://minh84.github.io/ml-examples/index.xml</link>
+    <description>Recent content in Machine Learning Examples on Machine Learning Examples</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 05 Mar 2017 21:36:46 +0000</lastBuildDate>
+    <atom:link href="/ml-examples/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title></title>
+      <link>https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/</link>
+      <pubDate>Sun, 05 Mar 2017 21:36:46 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/</guid>
+      <description>Linear basis function regression&amp;#182;In this note, we consider the simplest form of linear regression models where $h(\pmb{\mathrm{x}})$ is a linear function of the input variables $$ y(\pmb{\mathrm{x}},\pmb{\mathrm{w}}) = w_0 + w_1 x_1 + \ldots + w_D x_D $$ To make our problem more concrete, we consider the boston housing data. Go through this exercise, we will learn the following
+ get the raw data and preprocess it to a convenient form visualize the data via plot formulate the maximum likelihood =&amp;gt; least squares problem solve least square problem with Gradient Descend/Stochastic Gradient Descend try it in TensorFlow  Let&#39;s get started</description>
+    </item>
+    
+    <item>
+      <title>Linear Models</title>
+      <link>https://minh84.github.io/ml-examples/post/mlintro-linear-models/</link>
+      <pubDate>Sun, 05 Mar 2017 13:43:22 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/post/mlintro-linear-models/</guid>
+      <description>We start by looking at Supervised Learning with Linear Models inluding following topics
+ Linear Regression
+ Logistic Regression
+  Although Linear Models is a simple approach to supervised learning, it has a nice analytical form and it&amp;rsquo;s easy to interpret its results.
+Notation We define some notation to be used later
+ $\pmb{\mathrm{x}}^{(i)}\in\mathbb{R}^D,\ i=1,\ldots,N$ called input features $t^{(i)},\ i=1,\ldots,N$ called target variable  Our goal is to train/find a hypothesis function $h$ that allows us to predict a new target variable $t$ given a new input $\pmb{\mathrm{x}}=(x_1,\ldots,x_D)$ i.</description>
+    </item>
+    
+  </channel>
+</rss>
