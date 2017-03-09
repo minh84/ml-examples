@@ -362,15 +362,12 @@ $$
     0 & \cdots & 0 & \smash[b]{\underbrace{x^{(i)}_D}_{j-th}} & 0 & \cdots & 0 & \smash[b]{\underbrace{-x^{(i)}_D}_{y^{(i)}-th}} & 0 & \cdots & 0
 \end{array}\right)
 $$</p>
-<p>
-Denote $P=(P_{ij})\in \mathbb{R}^{N\times D}$ is defined as
+<p>Denote $P=(P_{ij})\in \mathbb{R}^{N\times D}$ is defined as
 $$
-P<em>{ij} = \left{\begin{array}{ll}
-1</em>{M_{ij} &gt; 0} &amp; \text{if } j\neq y^{(i)}\</p>
-<ul>
-<li>\sum<em>{j\neq y^{(i)}} 1</em>{M_{ij} &gt; 0} &amp; \text{otherwise}
-\end{array}
-\right.
+P_{ij} = \left\{\begin{array}{ll}
+1_{M_{ij} > 0} & \text{if } j\neq y^{(i)}\\
+\sum_{j\neq y^{(i)}} 1_{M_{ij} > 0} & \text{otherwise}
+\end{array}\right.
 $$
 From above equation, we can show that
 $$
@@ -378,8 +375,9 @@ $$
 $$
 where $P[i]$ is i-th row of $P$, so
 $$
-\nabla<em>W\sum</em>{i=1}^NL\left(y^{(i)}, s(x^{(i)})\right) = \sum_{i=1}^N P[i] \times x^{(i)} = X^T\times P
-$$</li>
+\nabla_W\sum_{i=1}^NL\left(y^{(i)}, s(x^{(i)})\right) = \sum_{i=1}^N P[i] \times x^{(i)} = X^T\times P
+$$
+</li>
 </ul>
 <h3 id="Implentation-SVM-with-Numpy">Implentation SVM with Numpy<a class="anchor-link" href="#Implentation-SVM-with-Numpy">&#182;</a></h3>
 </div>

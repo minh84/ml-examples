@@ -17,7 +17,7 @@
       <guid>https://minh84.github.io/ml-examples/post/learn-tensorflow-p01/</guid>
       <description>In this blog series we will learn TensorFlow by test it v.s Numpy implementation. We start by implement a Linear Classifier on CIFAR10 dataset. We look into the following topics
  Linear classifier with Multiclass SVM Linear classifier with Softmax  Linear classifier with Multiclass SVM In this part, we introduce to you
- Notation of a linear classifier Multiclass SVM loss function SGD optimizer  Go though the ipython notebook you will know</description>
+ Notation of a linear classifier Multiclass SVM loss function SGD optimizer  Go though this ipython notebook you will know</description>
     </item>
     
     <item>
