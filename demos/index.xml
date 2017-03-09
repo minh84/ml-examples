@@ -6,8 +6,18 @@
     <description>Recent content in Demos on Machine Learning Examples</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Mar 2017 21:36:46 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Mar 2017 16:00:03 +0000</lastBuildDate>
     <atom:link href="/ml-examples/demos/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title></title>
+      <link>https://minh84.github.io/ml-examples/demos/learn_tf/01-linear-classifier-svm/</link>
+      <pubDate>Thu, 09 Mar 2017 16:00:03 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/demos/learn_tf/01-linear-classifier-svm/</guid>
+      <description>Classification Problem&amp;#182;In this notebook we work on classification of CIFAR-10 dataset. We define some notation to use later on
+ $x^{(i)}$ are input-images each has shape 32x32x3 (RGB) $y^{(i)}$ are labels of above images and can take values $0,\ldots,9$ corresponding to 10 classes  To solve this classification, we try to find a function $h$ that maps from image $x$ to scores i.e $$ h: x \mapsto \left(\begin{array}{c}s_0(x)\\ \ldots\\ s_9(x)\end{array}\right) $$ where $s_i(x)$ is score of $x$ in $i-$th class.</description>
+    </item>
     
     <item>
       <title></title>

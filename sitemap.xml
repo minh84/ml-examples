@@ -2,6 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://minh84.github.io/ml-examples/demos/learn_tf/01-linear-classifier-svm/</loc>
+    <lastmod>2017-03-09T16:00:03+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://minh84.github.io/ml-examples/post/learn-tensorflow-p01/</loc>
+    <lastmod>2017-03-09T15:42:16+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/</loc>
     <lastmod>2017-03-05T21:36:46+00:00</lastmod>
   </url>
@@ -18,19 +28,19 @@
   
   <url>
     <loc>https://minh84.github.io/ml-examples/demos/</loc>
-    <lastmod>2017-03-05T21:36:46+00:00</lastmod>
+    <lastmod>2017-03-09T16:00:03+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://minh84.github.io/ml-examples/</loc>
-    <lastmod>2017-03-05T21:36:46+00:00</lastmod>
+    <lastmod>2017-03-09T16:00:03+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://minh84.github.io/ml-examples/post/</loc>
-    <lastmod>2017-03-05T13:43:22+00:00</lastmod>
+    <lastmod>2017-03-09T15:42:16+00:00</lastmod>
     <priority>0</priority>
   </url>
   

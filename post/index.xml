@@ -6,8 +6,19 @@
     <description>Recent content in Posts on Machine Learning Examples</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Mar 2017 13:43:22 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Mar 2017 15:42:16 +0000</lastBuildDate>
     <atom:link href="/ml-examples/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Learn TensorFlow P01</title>
+      <link>https://minh84.github.io/ml-examples/post/learn-tensorflow-p01/</link>
+      <pubDate>Thu, 09 Mar 2017 15:42:16 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/post/learn-tensorflow-p01/</guid>
+      <description>In this blog series we will learn TensorFlow by test it v.s Numpy implementation. We start by implement a Linear Classifier on CIFAR10 dataset. We look into the following topics
+ Linear classifier with Multiclass SVM Linear classifier with Softmax  Linear classifier with Multiclass SVM In this part, we introduce to you
+ Notation of a linear classifier Multiclass SVM loss function SGD optimizer  Go though the ipython notebook you will know</description>
+    </item>
     
     <item>
       <title>Linear Models</title>
