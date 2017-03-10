@@ -6,8 +6,18 @@
     <description>Recent content in Machine Learning Examples on Machine Learning Examples</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Mar 2017 16:00:03 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 10 Mar 2017 22:18:54 +0000</lastBuildDate>
     <atom:link href="/ml-examples/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title></title>
+      <link>https://minh84.github.io/ml-examples/demos/learn_tf/02-linear-classifier-softmax/</link>
+      <pubDate>Fri, 10 Mar 2017 22:18:54 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/demos/learn_tf/02-linear-classifier-softmax/</guid>
+      <description>Linear classifier with softmax&amp;#182;We continue from the previous notebook linear classifier with svm, in this note book we consider a different loss function the Softmax function $$ L(y, s(x)) = -\log\left(\frac{e^{s_y(x)}}{\sum_je^{s_j(x)}}\right) $$ we recall some notation $\newcommand{\real}{\mathbb{R}} \newcommand{\vi}[1]{#1^{(i)}} \newcommand{\vik}[1]{#1^{(i)}_k} \newcommand{\vij}[2]{#1^{(i)}_{#2}} $
+ $x\in\real^{D\times 1}$ is input features  $s(x)$ is linear score of given by $$ s(x) = W^T\times x $$ with $W\in \real^{C\times D}$ with $C$ is number of classes.</description>
+    </item>
     
     <item>
       <title></title>
@@ -26,7 +36,7 @@
       
       <guid>https://minh84.github.io/ml-examples/post/learn-tensorflow-p01/</guid>
       <description>In this blog series we will learn TensorFlow by test it v.s Numpy implementation. We start by implement a Linear Classifier on CIFAR10 dataset. We look into the following topics
- Linear classifier with Multiclass SVM Linear classifier with Softmax  Linear classifier with Multiclass SVM In this part, we introduce to you
+ Linear classifier with Multiclass SVM Linear classifier with Softmax  Linear classifier with Multiclass SVM In this notebook, we introduce to you
  Notation of a linear classifier Multiclass SVM loss function SGD optimizer  Go though this ipython notebook Linear Classifer with Multiclass SVM you will know</description>
     </item>
     

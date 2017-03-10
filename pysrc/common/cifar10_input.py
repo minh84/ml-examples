@@ -50,6 +50,11 @@ def load_flatten_CIFAR10(ROOT, num_training = 49000, num_test = 5000):
   X_val -= mean_images
   X_test -= mean_images
 
+  # append one for bias term
+  X_train = np.hstack([X_train, np.ones((X_train.shape[0], 1))])
+  X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
+  X_test = np.hstack([X_test, np.ones((X_test.shape[0], 1))])
+
   # return a dictionary of dataset
   data = {'X_train' : X_train, 'y_train' : y_train, 'mean_images' : mean_images
          ,'X_val'   : X_val,   'y_val'   : y_val
