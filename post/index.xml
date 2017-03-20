@@ -6,8 +6,19 @@
     <description>Recent content in Posts on Machine Learning Examples</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 09 Mar 2017 15:42:16 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Mar 2017 15:49:57 +0000</lastBuildDate>
     <atom:link href="/ml-examples/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Learn TensorFlow P02</title>
+      <link>https://minh84.github.io/ml-examples/post/learn-tensorflow-p02/</link>
+      <pubDate>Mon, 20 Mar 2017 15:49:57 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/post/learn-tensorflow-p02/</guid>
+      <description>From previous post, we have learnt linear classifier using SVM/Softmax. Linear classifier is simple and easy to understand however it&amp;rsquo;s quite limited in practice, since it&amp;rsquo;s very often that real dataset can&amp;rsquo;t be classified using linear classifier. In this note, we take a &amp;lsquo;hand-on&amp;rsquo; approach to introduce Neural Networks which can work well on nonlinear separable data.
+We look into the following topics
+ Introduction to Neural Network with 2d toy-examples Using Neural Network on CIFAR-10  Introduction to Neural Network with 2d toy-examples In this notebook NN with 2d toy examples, we discuss</description>
+    </item>
     
     <item>
       <title>Learn TensorFlow P01</title>
