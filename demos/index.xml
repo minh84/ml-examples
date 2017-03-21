@@ -41,10 +41,10 @@
     
     <item>
       <title></title>
-      <link>https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/</link>
+      <link>https://minh84.github.io/ml-examples/demos/ml_101/01-linear-regression/</link>
       <pubDate>Sun, 05 Mar 2017 21:36:46 +0000</pubDate>
       
-      <guid>https://minh84.github.io/ml-examples/demos/linear_models/01-Linear-Regression/</guid>
+      <guid>https://minh84.github.io/ml-examples/demos/ml_101/01-linear-regression/</guid>
       <description>Linear basis function regression&amp;#182;In this note, we consider the simplest form of linear regression models where $h(\pmb{\mathrm{x}})$ is a linear function of the input variables $$ y(\pmb{\mathrm{x}},\pmb{\mathrm{w}}) = w_0 + w_1 x_1 + \ldots + w_D x_D $$ To make our problem more concrete, we consider the boston housing data. Go through this exercise, we will learn the following
  get the raw data and preprocess it to a convenient form visualize the data via plot formulate the maximum likelihood =&amp;gt; least squares problem solve least square problem with Gradient Descend/Stochastic Gradient Descend try it in TensorFlow  Let&#39;s get started</description>
     </item>
