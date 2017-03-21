@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="generator" content="Hugo 0.20-DEV" />
     <link rel="shortcut icon" href="/ml-examples/images/favicon.ico">
-    <link href="https://minh84.github.io/ml-examples/post/index.xml" rel="alternate" type="application/rss+xml" title="Machine Learning Examples" />
+    <link href="https://minh84.github.io/ml-examples/index.xml" rel="alternate" type="application/rss+xml" title="Machine Learning Examples" />
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
     
@@ -31,7 +31,7 @@
     <script type="text/javascript" async src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML-full"></script>
     
     <link rel="stylesheet" type="text/css" href="/ml-examples/css/style.css">    
-    <title>Posts | Machine Learning Examples</title>
+    <title>Learn TensorFlow P02 | Machine Learning Examples</title>
   </head>
   <body>
     <div id="wrap">
@@ -44,48 +44,77 @@
       <div class="container">
         <div id="main">
 
-<div id="article-list">
-  
-  <div id="articles-list-header">
-    <h1>Archive: <span id="archive-value">Posts</span></h1>
-  </div>
-  
-  
-  
-  <div class="article">
-    <h2><a href="https://minh84.github.io/ml-examples/post/learn-tensorflow-p02/">Learn TensorFlow P02</a></h2>
-    <div class="article-meta">
-      <span class="posttime">2017/03/20</span>
-      
+<div class="article">
+  <header>
+    <div class="article-header">
+      <h1>Learn TensorFlow P02</h1>
+      <div class="article-meta">
+        <span class="posttime">2017/03/20</span>
+        
 
+      </div>
     </div>
-  </div>
-  
-  <div class="article">
-    <h2><a href="https://minh84.github.io/ml-examples/post/learn-tensorflow-p01/">Learn TensorFlow P01</a></h2>
-    <div class="article-meta">
-      <span class="posttime">2017/03/09</span>
-      
-
-    </div>
-  </div>
-  
-  <div class="article">
-    <h2><a href="https://minh84.github.io/ml-examples/post/mlintro-linear-models/">Linear Models</a></h2>
-    <div class="article-meta">
-      <span class="posttime">2017/03/05</span>
-      
-
-    </div>
-  </div>
-  
-  <nav>
-    <div id="pager">
-      
-      
     
+
+  </header>
+  <div class="content">
+    
+
+<p>From previous post, we have learnt linear classifier using SVM/Softmax. Linear classifier is simple and easy to understand however it&rsquo;s quite limited in practice, since it&rsquo;s very often that real dataset can&rsquo;t be classified using linear classifier. In this note, we take a &lsquo;hand-on&rsquo; approach to introduce Neural Networks which can work well on nonlinear separable data.</p>
+
+<p>We look into the following topics</p>
+
+<ul>
+<li>Introduction to Neural Network with 2d toy-examples</li>
+<li>Using Neural Network on CIFAR-10</li>
+</ul>
+
+<h2 id="introduction-to-neural-network-with-2d-toy-examples">Introduction to Neural Network with 2d toy-examples</h2>
+
+<p>In this notebook <a href="https://minh84.github.io/ml-examples/demos/learn_tf/03-nn-with-toy-examples/">NN with 2d toy examples</a>, we discuss</p>
+
+<ul>
+<li>What is Neural Networks?</li>
+<li>Use very simple NN to fit nonlinear separable data</li>
+<li>Visualize hidden layer of fitted NN.</li>
+</ul>
+
+<h1 id="using-nn-on-cifar-10">Using NN on CIFAR-10</h1>
+
+<p>As we have seen previously, our linear classifier can achieve ~ 34% accuracy on test-set. This is actually very low accuracy. In this notebook, we try out NNs with fully-connected layers</p>
+
+<ul>
+<li>Implement NNs to classify CIFAR-10</li>
+<li>Discuss important consideration when using NNs</li>
+</ul>
+
+  </div>
+  <footer>
+    <div class="article-footer">
+      
+
+      
+      
+
+      
+      
+      <div id="pagenavigation-next-prev">
+        
+        <div id="pagenavigation-next">
+          <span class="pagenav-label">Previous</span>
+          <a href="https://minh84.github.io/ml-examples/demos/learn_tf/02-linear-classifier-softmax/"></a>
+        </div>
+        
+        
+        <div id="pagenavigation-prev">
+          <span class="pagenav-label">Next</span>
+          <a href="https://minh84.github.io/ml-examples/demos/learn_tf/03-nn-with-toy-examples/"></a>
+        </div>
+        
+      </div>
+      
     </div>
-  </nav>
+  </footer>
 </div>
         </div>
         <div class="sidebar">
@@ -112,7 +141,7 @@
       <span>RSS</span>
     </div>
     <div id="rss">
-      <a href="https://minh84.github.io/ml-examples/post/index.xml" type="application/rss+xml" target="_blank">
+      <a href="https://minh84.github.io/ml-examples/index.xml" type="application/rss+xml" target="_blank">
         <i class="fa fa-rss-square fa-2x" aria-hidden="true"></i>
       </a>
     </div>

@@ -6,8 +6,29 @@
     <description>Recent content in Machine Learning Examples on Machine Learning Examples</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 10 Mar 2017 22:18:54 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 20 Mar 2017 16:15:09 +0000</lastBuildDate>
     <atom:link href="/ml-examples/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title></title>
+      <link>https://minh84.github.io/ml-examples/demos/learn_tf/03-nn-with-toy-examples/</link>
+      <pubDate>Mon, 20 Mar 2017 16:15:09 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/demos/learn_tf/03-nn-with-toy-examples/</guid>
+      <description>Neural Network&amp;#182;Recently, Deep Neural Network becomes very popular in various tasks from Image Classification, Speech Recognizion to NLP. In this notebook, we give an introduction of Neural Network in the context of Classification, it will cover the following topics
+ Neural Network Modeling Using NN on toy examples Visualize NN  Neural Network Modeling&amp;#182;The Neural Network has originally been inspired by the goal of modeling our brain system. The one with one hidden layer should have the following diagram</description>
+    </item>
+    
+    <item>
+      <title>Learn TensorFlow P02</title>
+      <link>https://minh84.github.io/ml-examples/post/learn-tensorflow-p02/</link>
+      <pubDate>Mon, 20 Mar 2017 15:49:57 +0000</pubDate>
+      
+      <guid>https://minh84.github.io/ml-examples/post/learn-tensorflow-p02/</guid>
+      <description>From previous post, we have learnt linear classifier using SVM/Softmax. Linear classifier is simple and easy to understand however it&amp;rsquo;s quite limited in practice, since it&amp;rsquo;s very often that real dataset can&amp;rsquo;t be classified using linear classifier. In this note, we take a &amp;lsquo;hand-on&amp;rsquo; approach to introduce Neural Networks which can work well on nonlinear separable data.
+We look into the following topics
+ Introduction to Neural Network with 2d toy-examples Using Neural Network on CIFAR-10  Introduction to Neural Network with 2d toy-examples In this notebook NN with 2d toy examples, we discuss</description>
+    </item>
     
     <item>
       <title></title>
