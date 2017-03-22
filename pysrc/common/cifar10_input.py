@@ -1,6 +1,7 @@
 import pickle
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 
 def load_CIFAR_batch(filename):
   """ load single batch of cifar """
@@ -27,7 +28,7 @@ def load_CIFAR10(ROOT):
   Xte, Yte = load_CIFAR_batch(os.path.join(ROOT, 'test_batch'))
   return Xtr, Ytr, Xte, Yte
 
-def load_flatten_CIFAR10(ROOT, num_training = 49000, num_test = 5000):
+def load_flatten_CIFAR10(ROOT, num_training = 49000, append_one = True):
   X_train, y_train, X_test, y_test = load_CIFAR10(ROOT)
 
   # let's divide train into training set (49000) + validation set (1000)
@@ -51,13 +52,22 @@ def load_flatten_CIFAR10(ROOT, num_training = 49000, num_test = 5000):
   X_test -= mean_images
 
   # append one for bias term
-  X_train = np.hstack([X_train, np.ones((X_train.shape[0], 1))])
-  X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
-  X_test = np.hstack([X_test, np.ones((X_test.shape[0], 1))])
+  if append_one:
+    X_train = np.hstack([X_train, np.ones((X_train.shape[0], 1))])
+    X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
+    X_test = np.hstack([X_test, np.ones((X_test.shape[0], 1))])
 
   # return a dictionary of dataset
   data = {'X_train' : X_train, 'y_train' : y_train, 'mean_images' : mean_images
          ,'X_val'   : X_val,   'y_val'   : y_val
          ,'X_test'  : X_test,  'y_test'  : y_test}
   return data
+
+def _labels():
+  return ['airplane', 'automobile', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship', 'truck']
+
+def show_img(x, y):
+  plt.axis('off')
+  plt.imshow(x.reshape(32, 32, 3).astype('uint8'))
+  plt.title('Label of image: {}'.format(_labels()[y]))
 
