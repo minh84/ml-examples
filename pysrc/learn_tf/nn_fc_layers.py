@@ -102,7 +102,7 @@ class FullyConnectedNN(object):
 
                 if (i % print_every == 0) or ((i+1) == nb_iters):
                     loss, acc = sess.run([self.cost, self.accuracy],
-                                         feed_dict={self.x : val_inputs, self.y : val_lables})
+                                         feed_dict={self.x : val_inputs, self.y : val_labels})
                     print('{:>5d} iter loss = {:>10.4f} acc = {:>5.2f}'.format(i, loss, acc*100.))
 
             for k in self.params_:
@@ -170,7 +170,7 @@ class FullyConnectedNN(object):
 
             elif (outputs.shape[1] == 3):
                 ax = plt.subplot(projection='3d')
-                ax.view_init(180, 50)
+                ax.view_init(30, 150)
                 ax.scatter(outputs[:, 0], outputs[:,1], outputs[:,2], c = colors)
 
                 if cut_params is not None:
@@ -180,7 +180,7 @@ class FullyConnectedNN(object):
                     y = np.linspace(np.min(outputs[:, 1]), np.max(outputs[:, 1]), 10)
                     X, Y = np.meshgrid(x, y)
                     Z = - (cut_w[0] * X + cut_w[1] * Y + cut_b)/cut_w[2]
-                    ax.plot_surface(X, Y, Z, alpha=0.5)
+                    ax.plot_surface(X, Y, Z, alpha=0.8, color='grey')
 
             else:
                 raise Exception('visualize currently supports only 2D or 3D output')
