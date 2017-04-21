@@ -1,0 +1,229 @@
+
+<html>
+<head>
+<title>Skip-gram demo</title>
+
+<script type="text/javascript" src="external/d3.min.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+
+<style type="text/css">
+body {
+  margin: 0;
+  padding: 0;
+}
+</style>
+
+<script type="text/javascript">
+
+var S = ["the", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"];
+var C = 1;
+
+var ch = 30;
+var cw = 55;
+
+function renderSeq(svg, S, xoff, yoff, col, title, cid) {
+    var txt = title + '(' + S.length + ') and window-size (' + C +')';
+    var pad = 3;
+    svg.append('text')
+        .attr('x', xoff)
+        .attr('y', yoff-5)
+        .attr('font-size', 16)
+        .attr('fill', 'black')
+        .text(txt)
+
+    for(var d = 0; d < S.length; d++) {
+        var xcoord = xoff + d * (cw + pad);
+        var ycoord = yoff;
+
+        svg.append('rect')
+            .attr('x', xcoord)
+            .attr('y', ycoord)
+            .attr('height', ch)
+            .attr('width', cw)
+            .attr('fill', col)
+            .attr('stroke', 'none')
+            .attr('stroke-width', '2')
+            .attr('id', cid+'_'+d)
+            .attr('class', cid);
+
+        svg.append('text')
+            .attr('x', xcoord + 1)
+            .attr('y', ycoord + 15)
+            .attr('font-size', 16)
+            .attr('fill', 'black')
+            .text(S[d]);
+    }
+
+    var y = yoff + 60;
+    svg.append('text')
+        .attr('x', xoff)
+        .attr('y', y)
+        .attr('font-size', 16)
+        .attr('fill', 'black')
+        .text('input-words')
+
+    var xtar_off = 100;
+    svg.append('text')
+        .attr('x', xoff + xtar_off)
+        .attr('y', y)
+        .attr('font-size', 16)
+        .attr('fill', 'black')
+        .text('target-words')
+
+    var xcoord = xoff + 20;
+    var ycoord = y+15;
+    var idx = 0;
+    for(var i = 0; i < S.length; ++i) {
+        for(var d = 0; d < 2*C; d++) {
+            var id = i + d - C;
+            if (d===C) {
+                id++;
+            }
+
+            if (id >= 0 && id < S.length) {
+                svg.append('rect')
+                    .attr('x', xcoord)
+                    .attr('y', ycoord)
+                    .attr('height', ch)
+                    .attr('width', cw)
+                    .attr('fill', col)
+                    .attr('stroke', 'none')
+                    .attr('stroke-width', '2')
+                    .attr('class', 'cw');
+
+                svg.append('text')
+                    .attr('x', xcoord + 1)
+                    .attr('y', ycoord + 15)
+                    .attr('font-size', 16)
+                    .attr('fill', 'black')
+                    .attr('class', 'cw_txt_'+i)
+                    .text('');
+
+                svg.append('rect')
+                    .attr('x', xcoord + xtar_off)
+                    .attr('y', ycoord )
+                    .attr('height', ch)
+                    .attr('width', cw)
+                    .attr('fill', col)
+                    .attr('stroke', 'none')
+                    .attr('stroke-width', '2')
+                    .attr('id', 'sw_' + d)
+                    .attr('class', 'sw');
+
+                svg.append('text')
+                    .attr('x', xcoord + 1 + xtar_off)
+                    .attr('y', ycoord + 15)
+                    .attr('font-size', 16)
+                    .attr('fill', 'black')
+                    .attr('id', 'sw_txt_' + idx)
+                    .attr('class', 'sw_txt')
+                    .text('');
+                idx++;
+                ycoord += 40;
+            }
+        }
+    }
+
+}
+
+var cw_idx = 0;
+var target_idx = 0;
+function focusCell() {
+    if (cw_idx == 0) {
+        for (var i = 0; i < S.length; ++i) {
+            d3.selectAll('.cw_txt_'+i).text('');
+        }
+        d3.selectAll('.sw_txt').text('');
+    }
+    for (var i = 0; i < S.length; ++i) {
+        d3.selectAll('.s').attr('stroke', 'none');
+    }
+
+    // highlight the input cell
+    var cw_cell = d3.select('#s_' + cw_idx);
+    cw_cell.attr('stroke', '#00A');
+
+    // update the input-word
+    d3.selectAll('.cw_txt_'+cw_idx).text(S[cw_idx]);
+
+
+    for (var d = 0; d < 2*C; ++d) {
+
+        var idx = cw_idx + d-C;
+        if (d>=C) idx++;
+
+        if (idx >= 0 && idx < S.length) {
+            // highlight surrounding cells
+            var sw_cell = d3.select('#s_' + idx);
+            sw_cell.attr('stroke', '#0A0');
+
+            // update surrounding word
+            var sw_text_cell = d3.select('#sw_txt_' + target_idx);
+            sw_text_cell.text('');
+            sw_text_cell.text(S[idx]);
+            target_idx++;
+        }
+
+    }
+
+    cw_idx++;
+    if (cw_idx >= S.length) {
+        cw_idx = 0;
+        target_idx = 0;
+    }
+}
+
+function draw(S, C) {
+    var d3elt = d3.select('#draw');
+    svg = d3elt.append('svg').attr('width', '100%').attr('height', '100%')
+        .append('g').attr('transform', 'scale(1)');
+
+    renderSeq(svg, S, 10, 20, '#DDF', 'Input Sequence', 's');
+
+    // render controls
+
+    svg.append('text')
+        .attr('x', 350)
+        .attr('y', 270)
+        .attr('font-size', 16)
+        .attr('fill', 'black')
+        .text('toggle movement');
+    svg.append('rect')
+        .attr('x', 350)
+        .attr('y', 250)
+        .attr('height', 30)
+        .attr('width', 150)
+        .attr('fill', "rgba(200, 200, 200, 0.1)")
+        .attr('stroke', 'black')
+        .attr('stroke-width', '2')
+        .attr('style', 'cursor:pointer;')
+        .on('click', function() {
+            // toggle
+            if(iid === -1) {
+                iid = setInterval(focusCell, 1000);
+            } else {
+                clearInterval(iid);
+                iid = -1;
+            }
+        });
+}
+
+var iid = -1;
+function start() {
+    draw(S,C);
+    iid = setInterval(focusCell, 1000);
+}
+
+</script>
+
+
+
+</head>
+
+<body onload="start()">
+
+<div id="draw">
+</div>
+
+</body>
+</html>
