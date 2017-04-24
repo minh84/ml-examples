@@ -12,6 +12,18 @@ def get_target(words, idx, window_size=5):
 
     return list(target_words)
 
+def _sum_rows(x):
+  """Returns a vector summing up each row of the matrix x."""
+  # _sum_rows(x) is equivalent to math_ops.reduce_sum(x, 1) when x is
+  # a matrix.  The gradient of _sum_rows(x) is more efficient than
+  # reduce_sum(x, 1)'s gradient in today's implementation. Therefore,
+  # we use _sum_rows(x) in the nce_loss() computation since the loss
+  # is mostly used for training.
+  cols = tf.shape(x)[1]
+  ones_shape = tf.stack([cols, 1])
+  ones = tf.ones(ones_shape, x.dtype)
+  return tf.reshape(tf.matmul(x, ones), [-1])
+
 
 class Word2vecSampling(object):
     def __init__(self,
@@ -96,7 +108,7 @@ class Word2vecSampling(object):
             # negative sampling.
             sampled_values = None
 
-            if self._sampling_method == 'neg':
+            if self._sampling_method == 'fixed_unigram':
                 sampled_values = tf.nn.fixed_unigram_candidate_sampler(
                     true_classes=self._target_words,
                     num_true=1,
@@ -105,7 +117,7 @@ class Word2vecSampling(object):
                     range_max=self._vocabs_size,
                     distortion=0.75,
                     unigrams=self._freqs_list)
-            elif self._sampling_method == 'log_uni':
+            elif self._sampling_method == 'log_uniform':
                 sampled_values = tf.nn.log_uniform_candidate_sampler(
                     true_classes=self._target_words,
                     num_true=1,
@@ -132,9 +144,11 @@ class Word2vecSampling(object):
                 if self._loss_func == 'sampled_softmax':
                     self._loss = tf.nn.softmax_cross_entropy_with_logits(labels=out_labels, logits=out_logits)
                 elif self._loss_func == 'nce':
-                    self._loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=out_labels, logits=out_logits)
+                    self._loss = _sum_rows(tf.nn.sigmoid_cross_entropy_with_logits(labels=out_labels,
+                                                                                   logits=out_logits))
                 else:
                     raise Exception('Unknown sampling method {}, currently only support neg/nce'.format(self._sampling_method))
+
 
             # compute cost
             self._cost = tf.reduce_mean(self._loss)
@@ -151,7 +165,7 @@ class Word2vecSampling(object):
     def build_graph(self,settings = {'embed_dim'       : 200,
                                      'nb_neg_sample'   : 100,
                                      'learning_rate'   : 0.2,
-                                     'sampling_method' : 'neg',
+                                     'sampling_method' : 'fixed_uni',
                                      'loss_func'       : 'nce',
                                      'use_tf_loss'     : False,
                                      'subtract_log_q'  : True
@@ -164,7 +178,7 @@ class Word2vecSampling(object):
         self._loss_func         = settings.get('loss_func', 'nce')
         self._subtract_log_q    = settings.get('subtract_log_q', True)
         self._use_tf_loss       = settings.get('use_tf_loss', False)
-        assert (self._sampling_method == 'neg' or self._sampling_method == 'log_uni')
+        assert (self._sampling_method == 'fixed_unigram' or self._sampling_method == 'log_uniform')
         assert (self._loss_func == 'sampled_softmax' or self._loss_func == 'nce')
 
         self._graph = tf.Graph()
