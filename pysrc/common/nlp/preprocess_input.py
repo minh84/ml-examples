@@ -29,7 +29,7 @@ def create_lookup_tables(word_counts, min_count = 0):
     # get vocabs, word2id, id2word
     vocabs = [w for w in sorted_vocab if word_counts[w] > min_count]
     word2id = {word: ii for ii, word in enumerate(vocabs)}
-    id2word = {ii: word for ii, word in word2id.items()}
+    id2word = {ii: word for word, ii in word2id.items()}
 
     return vocabs, word2id, id2word
 

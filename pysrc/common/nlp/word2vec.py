@@ -153,7 +153,7 @@ class Word2vecSampling(object):
             # compute cost
             self._cost = tf.reduce_mean(self._loss)
 
-            tf.summary.scalar("training loss", self._cost)
+            tf.summary.scalar("training_loss", self._cost)
 
             # create global_step to store training-step
             self._global_step = tf.Variable(0, dtype=tf.int32,
@@ -167,19 +167,20 @@ class Word2vecSampling(object):
     def build_graph(self,settings = {'embed_dim'       : 200,
                                      'nb_neg_sample'   : 100,
                                      'learning_rate'   : 0.2,
-                                     'sampling_method' : 'fixed_uni',
+                                     'sampling_method' : 'fixed_unigram',
                                      'loss_func'       : 'nce',
                                      'use_tf_loss'     : False,
                                      'subtract_log_q'  : True
                                      }):
         # get hyper-parameters
-        self._embed_dim         = settings.get('embed_dim', 200)
-        self._nb_neg_sample     = settings.get('nb_neg_sample', 100)
-        self._learning_rate     = settings.get('learning_rate', 0.2),
-        self._sampling_method   = settings.get('sampling_method', 'neg')
-        self._loss_func         = settings.get('loss_func', 'nce')
-        self._subtract_log_q    = settings.get('subtract_log_q', True)
-        self._use_tf_loss       = settings.get('use_tf_loss', False)
+        self._embed_dim         = settings.get('embed_dim',         200)
+        self._nb_neg_sample     = settings.get('nb_neg_sample',     100)
+        self._learning_rate     = settings.get('learning_rate',     0.2),
+        self._sampling_method   = settings.get('sampling_method',   'fixed_unigram')
+        self._loss_func         = settings.get('loss_func',         'nce')
+        self._subtract_log_q    = settings.get('subtract_log_q',    True)
+        self._use_tf_loss       = settings.get('use_tf_loss',       False)
+
         assert (self._sampling_method == 'fixed_unigram' or self._sampling_method == 'log_uniform')
         assert (self._loss_func == 'sampled_softmax' or self._loss_func == 'nce')
 
@@ -214,9 +215,9 @@ class Word2vecSampling(object):
                 x.extend([batch_x] * len(batch_y))
             yield x, y
 
-    def train(self, epochs, batch_size, window_size,
+    def train(self, epochs, batch_size, window_size, max_iters = None,
                     print_every = 100, save_every=1000,
-                    summary_every = 5, save_path = None):
+                    summary_every = 5, summary_path = None):
         iteration = 1
         n_batches = len(self._train_wordids) // batch_size
 
@@ -225,12 +226,22 @@ class Word2vecSampling(object):
 
             summary_op = None
             summary_writer = None
-            if save_path != None:
+
+            run_ops = [self._cost, self._optimizer]
+            if summary_path != None:
                 summary_op = tf.summary.merge_all()
+                save_path = 'logs/{}/run_lr={},lf={},sampling={},use_tf={}'.format( summary_path,
+                                                                                    self._learning_rate,
+                                                                                    self._loss_func,
+                                                                                    self._sampling_method,
+                                                                                    self._use_tf_loss)
                 summary_writer = tf.summary.FileWriter(save_path, self._graph)
+                run_ops.append(summary_op)
 
             loss = 0
             last_summary_time = 0
+            break_loop = False
+            t0 = time()
             for e in range(1, epochs + 1):
                 batches = self.get_batches(batch_size, window_size)
                 start = time()
@@ -238,10 +249,10 @@ class Word2vecSampling(object):
                 for x, y in batches:
                     feed = {self._center_words : x,
                             self._target_words : np.array(y)[:, None]}
-                    train_loss, _ = sess.run([self._cost,
-                                              self._optimizer], feed_dict=feed)
 
-                    loss += train_loss
+                    output = sess.run(run_ops, feed_dict=feed)
+
+                    loss += output[0]
 
                     if iteration % print_every == 0:
                         end = time()
@@ -253,15 +264,105 @@ class Word2vecSampling(object):
                         loss = 0
 
                         start = time()
-                    if (summary_writer != None) and (time.time() - last_summary_time > summary_every):
-                        summary_str = sess.run(summary_op)
-                        summary_writer.add_summary(summary_str,
-                                                   self._global_step)
+                    if (summary_writer != None) and (time() - last_summary_time > summary_every):
+                        summary_writer.add_summary(output[-1],
+                                                   self._global_step.eval())
 
                     if iteration % save_every == 0:
+                        checkpoint_string = 'checkpoints/sg_lr={},lf={},sampling={},use_tf={}'.format(self._learning_rate,
+                                                                                                      self._loss_func,
+                                                                                                      self._sampling_method,
+                                                                                                      self._use_tf_loss)
                         self._saver.save(sess,
-                                         'checkpoints/skip-gram',
+                                         checkpoint_string,
                                          global_step=self._global_step)
 
-                    i_batch += 1
-                    iteration+=1
+                    i_batch   += 1
+                    iteration += 1
+
+                    if (max_iters!= None and iteration > max_iters):
+                        break_loop = True
+                        break
+
+                if break_loop:
+                    break
+
+            print('Total run-time {:.2f}'.format(time() - t0))
+
+    def build_eval_graph(self):
+        with self._graph.as_default():
+            analogy_a = tf.placeholder(tf.int32)
+            analogy_b = tf.placeholder(tf.int32)
+            analogy_c = tf.placeholder(tf.int32)
+
+            # normalized word embeddings of shape [vocab_size, emb_dim]
+            nemb = tf.nn.l2_normalize(self._embed_matrix, 1)
+
+            # each row of word embeddings
+            a_emb = tf.gather(nemb, analogy_a)
+            b_emb = tf.gather(nemb, analogy_b)
+            c_emb = tf.gather(nemb, analogy_c)
+
+            # we expect target = c_emb + (b_emb - a_emb): has shape [N, emb_dim]
+            target = c_emb + (b_emb - a_emb)
+
+            # compute the cosine distance: has shape [N, vocab_size]
+            dist = tf.matmul(target, nemb, transpose_b=True)
+
+            # for each equestion pick top 4 words
+            _, pred_idx = tf.nn.top_k(dist, 4)
+
+            # nodes for computing 10-neighbors for a given word
+            nearby_word = tf.placeholder(tf.int32)
+            nearby_emb = tf.gather(nemb, nearby_word)
+            nearby_dist = tf.matmul(nearby_emb, nemb, transpose_b=True)
+            nearby_val, nearby_idx = tf.nn.top_k(nearby_dist, 10)
+
+            # put to self so that we can use it other function
+            self._analogy_a = analogy_a
+            self._analogy_b = analogy_b
+            self._analogy_c = analogy_c
+            self._analogy_pred_idx = pred_idx
+            self._nearby_word = nearby_word
+            self._nearby_val = nearby_val
+            self._nearby_idx = nearby_idx
+
+    def _predict(self, analogy, sess):
+        """Predict the top 4 answers for analogy questions."""
+        idx, = sess.run([self._analogy_pred_idx], {
+            self._analogy_a: analogy[:, 0],
+            self._analogy_b: analogy[:, 1],
+            self._analogy_c: analogy[:, 2]
+        })
+        return idx
+
+    def load_checkpoint(self, checkpoint):
+        sess = tf.Session(graph=self._graph)
+        self._saver.restore(sess, checkpoint)
+        return sess
+
+    def analogy(self, sess, w0, w1, w2):
+        """Predict word w3 as in w0:w1 vs w2:w3."""
+        print('predict {}-{} as {}-?'.format(w0, w1, w2))
+        wid = np.array([[self._word2id.get(w, 0) for w in [w0, w1, w2]]])
+        idx = self._predict(wid, sess)
+        nb_analogy = 0
+        for c in [self._id2word[i] for i in idx[0, :]]:
+            if c not in [w0, w1, w2]:
+                print('answer: {}\n'.format(c))
+                nb_analogy += 1
+                break
+
+        if (nb_analogy == 0):
+            print("unknown")
+
+    def nearby(self, sess, w):
+        """Prints out nearby words given a list of words."""
+        ids = np.array([self._word2id.get(w, 0) ])
+        vals, idx = sess.run(
+            [self._nearby_val, self._nearby_idx], {self._nearby_word: ids})
+
+        print("\nNearest neighbours of [{}]\n=====================================".format(w))
+        for (neighbor, distance) in zip(idx[0, :], vals[0, :]):
+            print("%-20s %6.4f" % (self._id2word[neighbor], distance))
+
