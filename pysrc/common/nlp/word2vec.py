@@ -63,6 +63,8 @@ class Word2vecSampling(object):
             # true logits: [None, 1]
             true_logits = tf.reshape(tf.reduce_sum(tf.multiply(self._embed, true_w), 1) + true_b, [-1, 1])
 
+            assert (true_logits.get_shape().as_list() == [None, 1])
+
             # Weights for sampled ids: [num_sampled, emb_dim]
             sampled_w = tf.nn.embedding_lookup(self._softmax_weights, sampled_ids)
 
@@ -71,6 +73,8 @@ class Word2vecSampling(object):
 
             # sample logits [None, num_sampled]
             sampled_logits = tf.matmul(self._embed, sampled_w, transpose_b=True) + sampled_b
+
+            assert (true_logits.get_shape().as_list() == [None, self._nb_neg_sample])
 
             if self._subtract_log_q:
                 # Subtract log of Q(l), prior probability that l appears in sampled.
