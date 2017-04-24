@@ -47,6 +47,42 @@ class Word2vecSampling(object):
                 self._embed = tf.nn.embedding_lookup(self._embed_matrix,
                                                      self._center_words, name = 'embed_center_word')
 
+    def _sampled_logit(self, sampled_ids, true_expected_count, sampled_expected_count, subtract_log_q = True):
+        with self._graph.as_default():
+            # Weights for labels: [batch_size, emb_dim]
+            true_w = tf.nn.embedding_lookup(self._softmax_weights, self._target_words)
+            # Biases for labels: [batch_size, 1]
+            true_b = tf.nn.embedding_lookup(self._softmax_biases, self._target_words)
+
+            print(self._embed.get_shape().as_list())
+            print(true_w.get_shape().as_list())
+            print(true_b.get_shape().as_list())
+
+            # true logits: [batch_size, 1]
+            true_logits = tf.reduce_sum(tf.multiply(self._embed, true_w), 1) + true_b
+            print(true_logits.get_shape().as_list())
+
+            # Weights for sampled ids: [num_sampled, emb_dim]
+            sampled_w = tf.nn.embedding_lookup(self._softmax_weights, sampled_ids)
+            # Biases for sampled ids: [num_sampled, 1]
+            sampled_b = tf.nn.embedding_lookup(self._softmax_biases, sampled_ids)
+
+
+
+            # sample logits [batch_size, k]
+            sampled_b_vec = tf.reshape(sampled_b, [self._nb_neg_sample])
+            sampled_logits = tf.matmul(self._embed, sampled_w, transpose_b=True) + sampled_b_vec
+
+            if subtract_log_q:
+                # Subtract log of Q(l), prior probability that l appears in sampled.
+                true_logits -= tf.log(true_expected_count)
+                sampled_logits -= tf.log(sampled_expected_count)
+
+            out_logits = tf.concat([true_logits, sampled_logits], 1)
+            out_labels = tf.concat([tf.ones_like(true_logits), tf.zeros_like(sampled_logits)], 1)
+
+        return out_logits, out_labels
+
     def _create_neg_sampling_loss(self):
         with self._graph.as_default():
             self._softmax_weights = tf.Variable(tf.truncated_normal(shape = [self._vocabs_size, self._embed_dim],
@@ -56,28 +92,33 @@ class Word2vecSampling(object):
             labels_matrix = tf.cast(self._target_words, dtype=tf.int64)
 
             # negative sampling.
-            sampled_values = None # default it will use log_uni
+
+            sampled_ids = None
+            true_expected_count = None
+            sampled_expected_count = None
             if self._sampling_method == 'neg':
-                sampled_values = (tf.nn.fixed_unigram_candidate_sampler(
+                sampled_ids, true_expected_count, sampled_expected_count = tf.nn.fixed_unigram_candidate_sampler(
                     true_classes=labels_matrix,
                     num_true=1,
                     num_sampled=self._nb_neg_sample,
                     unique=True,
                     range_max=self._vocabs_size,
                     distortion=0.75,
-                    unigrams=self._freqs_list))
+                    unigrams=self._freqs_list)
+            elif self._sampling_method == 'log_uni':
+                sampled_ids, true_expected_count, sampled_expected_count = tf.nn.log_uniform_candidate_sampler(
+                    true_classes=labels_matrix,
+                    num_true=1,
+                    num_sampled=self._nb_neg_sample,
+                    unique=True,
+                    range_max=self._vocabs_size)
 
+            out_logits, out_labels = self._sampled_logit(sampled_ids, true_expected_count, sampled_expected_count, False)
             # compute loss
-            if self._loss_func == 'neg':
-                self._loss = tf.nn.sampled_softmax_loss(self._softmax_weights, self._softmax_biases,
-                                                        self._target_words, self._embed,
-                                                        self._nb_neg_sample, self._vocabs_size,
-                                                        sampled_values=sampled_values)
+            if self._loss_func == 'sampled_softmax':
+                self._loss = tf.nn.softmax_cross_entropy_with_logits(labels=out_labels, logits=out_logits)
             elif self._loss_func == 'nce':
-                self._loss = tf.nn.nce_loss(self._softmax_weights, self._softmax_biases,
-                                            self._target_words, self._embed,
-                                            self._nb_neg_sample, self._vocabs_size,
-                                            sampled_values=sampled_values)
+                self._loss = tf.nn.sigmoid_cross_entropy_with_logits(labels=out_labels, logits=out_logits)
             else:
                 raise Exception('Unknown sampling method {}, currently only support neg/nce'.format(self._sampling_method))
 
@@ -105,7 +146,7 @@ class Word2vecSampling(object):
         self._sampling_method   = settings.get('sampling_method', 'neg')
         self._loss_func         = settings.get('loss_func', 'nce')
         assert (self._sampling_method == 'neg' or self._sampling_method == 'log_uni')
-        assert (self._loss_func == 'neg' or self._loss_func == 'nce')
+        assert (self._loss_func == 'sampled_softmax' or self._loss_func == 'nce')
 
         self._graph = tf.Graph()
 
