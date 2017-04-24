@@ -35,8 +35,8 @@ class Word2vecSampling(object):
     def _create_placeholder(self):
         with self._graph.as_default():
             # first dim is batch-size can be variable so we set it to None
-            self._center_words = tf.placeholder(tf.int32, shape=[None],    name='center_words')
-            self._target_words = tf.placeholder(tf.int32, shape=[None, 1], name='target_words')
+            self._center_words = tf.placeholder(tf.int64, shape=[None],    name='center_words')
+            self._target_words = tf.placeholder(tf.int64, shape=[None, 1], name='target_words')
 
     def _create_embedding(self):
         with self._graph.as_default():
@@ -47,33 +47,32 @@ class Word2vecSampling(object):
                 self._embed = tf.nn.embedding_lookup(self._embed_matrix,
                                                      self._center_words, name = 'embed_center_word')
 
-    def _sampled_logit(self, sampled_ids, true_expected_count, sampled_expected_count, subtract_log_q = True):
+    def _sampled_logit(self, sampled_ids, true_expected_count, sampled_expected_count):
         with self._graph.as_default():
-            # Weights for labels: [batch_size, emb_dim]
-            true_w = tf.nn.embedding_lookup(self._softmax_weights, self._target_words)
-            # Biases for labels: [batch_size, 1]
-            true_b = tf.nn.embedding_lookup(self._softmax_biases, self._target_words)
 
-            print(self._embed.get_shape().as_list())
-            print(true_w.get_shape().as_list())
-            print(true_b.get_shape().as_list())
+            # we need flatten target so that when we do look-up we obtain output of shape (batch_size x embed_dim)
+            _target_flat = tf.reshape(self._target_words, [-1])
 
-            # true logits: [batch_size, 1]
-            true_logits = tf.reduce_sum(tf.multiply(self._embed, true_w), 1) + true_b
-            print(true_logits.get_shape().as_list())
+            # Weights for labels: [None, emb_dim]
+            true_w = tf.nn.embedding_lookup(self._softmax_weights, _target_flat)
+
+            # Biases for labels: [None]
+            true_b = tf.nn.embedding_lookup(self._softmax_biases, _target_flat)
+
+            # self._embed: [None, emb_dim], true_w: [None, emb_dim]
+            # true logits: [None, 1]
+            true_logits = tf.reshape(tf.reduce_sum(tf.multiply(self._embed, true_w), 1) + true_b, [-1, 1])
 
             # Weights for sampled ids: [num_sampled, emb_dim]
             sampled_w = tf.nn.embedding_lookup(self._softmax_weights, sampled_ids)
-            # Biases for sampled ids: [num_sampled, 1]
+
+            # Biases for sampled ids: [num_sampled]
             sampled_b = tf.nn.embedding_lookup(self._softmax_biases, sampled_ids)
 
+            # sample logits [None, num_sampled]
+            sampled_logits = tf.matmul(self._embed, sampled_w, transpose_b=True) + sampled_b
 
-
-            # sample logits [batch_size, k]
-            sampled_b_vec = tf.reshape(sampled_b, [self._nb_neg_sample])
-            sampled_logits = tf.matmul(self._embed, sampled_w, transpose_b=True) + sampled_b_vec
-
-            if subtract_log_q:
+            if self._subtract_log_q:
                 # Subtract log of Q(l), prior probability that l appears in sampled.
                 true_logits -= tf.log(true_expected_count)
                 sampled_logits -= tf.log(sampled_expected_count)
@@ -89,16 +88,14 @@ class Word2vecSampling(object):
                                                                     stddev=1.0 / np.sqrt(self._embed_dim)), name = 'softmax_w')
             self._softmax_biases = tf.Variable(tf.zeros([self._vocabs_size]), name = 'softmax_b')
 
-            labels_matrix = tf.cast(self._target_words, dtype=tf.int64)
-
             # negative sampling.
-
             sampled_ids = None
             true_expected_count = None
             sampled_expected_count = None
+
             if self._sampling_method == 'neg':
                 sampled_ids, true_expected_count, sampled_expected_count = tf.nn.fixed_unigram_candidate_sampler(
-                    true_classes=labels_matrix,
+                    true_classes=self._target_words,
                     num_true=1,
                     num_sampled=self._nb_neg_sample,
                     unique=True,
@@ -107,13 +104,14 @@ class Word2vecSampling(object):
                     unigrams=self._freqs_list)
             elif self._sampling_method == 'log_uni':
                 sampled_ids, true_expected_count, sampled_expected_count = tf.nn.log_uniform_candidate_sampler(
-                    true_classes=labels_matrix,
+                    true_classes=self._target_words,
                     num_true=1,
                     num_sampled=self._nb_neg_sample,
                     unique=True,
                     range_max=self._vocabs_size)
 
-            out_logits, out_labels = self._sampled_logit(sampled_ids, true_expected_count, sampled_expected_count, False)
+            out_logits, out_labels = self._sampled_logit(sampled_ids, true_expected_count, sampled_expected_count)
+
             # compute loss
             if self._loss_func == 'sampled_softmax':
                 self._loss = tf.nn.softmax_cross_entropy_with_logits(labels=out_labels, logits=out_logits)
@@ -138,13 +136,15 @@ class Word2vecSampling(object):
                                      'nb_neg_sample'   : 100,
                                      'learning_rate'   : 0.2,
                                      'sampling_method' : 'neg',
-                                     'loss_func'       : 'nce'}):
+                                     'loss_func'       : 'nce',
+                                     'subtract_log_q' :  True}):
         # get hyper-parameters
         self._embed_dim         = settings.get('embed_dim', 200)
         self._nb_neg_sample     = settings.get('nb_neg_sample', 100)
-        self._learning_rate     = settings.get('learning_rate', 0.2)
+        self._learning_rate     = settings.get('learning_rate', 0.2),
         self._sampling_method   = settings.get('sampling_method', 'neg')
         self._loss_func         = settings.get('loss_func', 'nce')
+        self._subtract_log_q    = settings.get('subtract_log_q', True)
         assert (self._sampling_method == 'neg' or self._sampling_method == 'log_uni')
         assert (self._loss_func == 'sampled_softmax' or self._loss_func == 'nce')
 
