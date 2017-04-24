@@ -153,6 +153,8 @@ class Word2vecSampling(object):
             # compute cost
             self._cost = tf.reduce_mean(self._loss)
 
+            tf.summary.scalar("training loss", self._cost)
+
             # create global_step to store training-step
             self._global_step = tf.Variable(0, dtype=tf.int32,
                                             trainable=False, name='global_step')
@@ -213,14 +215,22 @@ class Word2vecSampling(object):
             yield x, y
 
     def train(self, epochs, batch_size, window_size,
-                    print_every = 100, save_every=1000):
+                    print_every = 100, save_every=1000,
+                    summary_every = 5, save_path = None):
         iteration = 1
         n_batches = len(self._train_wordids) // batch_size
 
         with tf.Session(graph=self._graph) as sess:
             sess.run(tf.global_variables_initializer())
 
+            summary_op = None
+            summary_writer = None
+            if save_path != None:
+                summary_op = tf.summary.merge_all()
+                summary_writer = tf.summary.FileWriter(save_path, self._graph)
+
             loss = 0
+            last_summary_time = 0
             for e in range(1, epochs + 1):
                 batches = self.get_batches(batch_size, window_size)
                 start = time()
@@ -241,7 +251,12 @@ class Word2vecSampling(object):
                               "Avg. Training loss: {:.4f}".format(loss / 100),
                               "{:.4f} sec/batch".format((end - start) / 100))
                         loss = 0
+
                         start = time()
+                    if (summary_writer != None) and (time.time() - last_summary_time > summary_every):
+                        summary_str = sess.run(summary_op)
+                        summary_writer.add_summary(summary_str,
+                                                   self._global_step)
 
                     if iteration % save_every == 0:
                         self._saver.save(sess,
