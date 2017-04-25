@@ -175,7 +175,7 @@ class Word2vecSampling(object):
         # get hyper-parameters
         self._embed_dim         = settings.get('embed_dim',         200)
         self._nb_neg_sample     = settings.get('nb_neg_sample',     100)
-        self._learning_rate     = settings.get('learning_rate',     0.2),
+        self._learning_rate     = settings.get('learning_rate',     0.2)
         self._sampling_method   = settings.get('sampling_method',   'fixed_unigram')
         self._loss_func         = settings.get('loss_func',         'nce')
         self._subtract_log_q    = settings.get('subtract_log_q',    True)
@@ -230,7 +230,7 @@ class Word2vecSampling(object):
             run_ops = [self._cost, self._optimizer]
             if summary_path != None:
                 summary_op = tf.summary.merge_all()
-                save_path = 'logs/{}/run_lr={},lf={},sampling={},use_tf={}'.format( summary_path,
+                save_path = 'logs/{}/run(lr={},lf={},sampling={},use_tf={})'.format( summary_path,
                                                                                     self._learning_rate,
                                                                                     self._loss_func,
                                                                                     self._sampling_method,
@@ -269,10 +269,10 @@ class Word2vecSampling(object):
                                                    self._global_step.eval())
 
                     if iteration % save_every == 0:
-                        checkpoint_string = 'checkpoints/sg_lr={},lf={},sampling={},use_tf={}'.format(self._learning_rate,
-                                                                                                      self._loss_func,
-                                                                                                      self._sampling_method,
-                                                                                                      self._use_tf_loss)
+                        checkpoint_string = 'checkpoints/sg(lr={},lf={},sampling={},use_tf={})'.format(self._learning_rate,
+                                                                                                       self._loss_func,
+                                                                                                       self._sampling_method,
+                                                                                                       self._use_tf_loss)
                         self._saver.save(sess,
                                          checkpoint_string,
                                          global_step=self._global_step)
