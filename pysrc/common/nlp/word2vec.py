@@ -287,6 +287,16 @@ class Word2vecSampling(object):
                 if break_loop:
                     break
 
+            # save last checkpoint
+            if not break_loop:
+                checkpoint_string = 'checkpoints/sg_lr={},lf={},sampling={},use_tf={}'.format(self._learning_rate,
+                                                                                              self._loss_func,
+                                                                                              self._sampling_method,
+                                                                                              self._use_tf_loss)
+                self._saver.save(sess,
+                                 checkpoint_string,
+                                 global_step=self._global_step)
+
             print('Total run-time {:.2f}'.format(time() - t0))
 
     def build_eval_graph(self):
